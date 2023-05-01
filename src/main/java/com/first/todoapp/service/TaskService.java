@@ -1,5 +1,6 @@
 package com.first.todoapp.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,12 +45,18 @@ public class TaskService {
 
 	@Transactional
 	public void updetaTaskAsFinished(Long id) {
+		Task task = this.repository.findTaskById(id);
+		LocalDateTime timeNow = LocalDateTime.now();
 		Optional<Task> optionalTask = this.repository.findById(id);
-
+		
 		if (optionalTask.isEmpty()) {
 
 			throw new ToDoExceptions("Task not found pepe", HttpStatus.NOT_FOUND);
 
+		}
+		//definimos el tiempo para que la tarea sea LATE
+		if (task.getCreatedDate().getMinute() < timeNow.getMinute()) {
+			task.setTaskStatus(TaskStatus.LATE);
 		}
 		this.repository.markTaskAsFinished(id);
 	}
@@ -63,7 +70,12 @@ public class TaskService {
 			throw new ToDoExceptions("Task not found pepito", HttpStatus.NOT_FOUND);
 
 		}
-		this.repository.deleteById(id);;
+		this.repository.deleteById(id);
+	}
+
+	public List<Task> findFinishedTask(boolean finished) {
+
+		return this.repository.findFinishedTask(finished);
 	}
 
 }

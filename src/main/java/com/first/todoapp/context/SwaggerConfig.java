@@ -28,7 +28,7 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfo(
-                "Todo API",
+                "Todo API Task",
                 "La API REST de ToDo App.",
                 "v1",
                 "Terms of service",
